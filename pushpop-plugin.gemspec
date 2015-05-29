@@ -4,7 +4,7 @@ $:.push File.expand_path("../lib", __FILE__)
 Gem::Specification.new do |s|
 
   s.name        = "pushpop-product-hunt"
-  s.version     = Pushpop::ProductHunt::VERSION
+  s.version     = '0.1'
   s.authors     = ["Joe Wegner"]
   s.email       = "joe@keen.io"
   s.homepage    = "https://github.com/pushpop-project/pushpop-product-hunt"

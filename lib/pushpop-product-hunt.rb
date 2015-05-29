@@ -15,7 +15,15 @@ module Pushpop
       def run(last_response=nil, step_responses=nil)
         client.reset()
 
-        self.configure(last_response, step_responses)
+        ret = self.configure(last_response, step_responses)
+
+        resp = client.get()
+
+        if resp
+          resp
+        else
+          ret
+        end
       end
 
       def configure(last_response=nil, step_responses=nil)

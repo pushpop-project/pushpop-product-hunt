@@ -1,9 +1,14 @@
 require 'spec_helper'
 require 'date'
+require 'webmock/rspec'
 
 ENV['PRODUCT_HUNT_TOKEN'] = '12345'
 
 describe Pushpop::ProductHunt::Step do
+
+  before(:each) do
+    stub_request(:get, /.*api\.producthunt\.com.*/)
+  end
 
   describe 'internal functions' do
     it 'has a ProductHunt::Client' do

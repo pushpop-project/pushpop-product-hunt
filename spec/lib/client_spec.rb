@@ -1,6 +1,12 @@
 require 'spec_helper'
+require 'webmock/rspec'
 
 describe Pushpop::ProductHunt::Client do
+
+  before(:each) do
+    stub_request(:get, /.*api\.producthunt\.com.*/)
+  end
+
   describe 'internal functions' do
     client = nil
     before(:each) do

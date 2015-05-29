@@ -1,4 +1,5 @@
 require 'httparty'
+require 'json'
 
 module Pushpop
   module ProductHunt
@@ -6,7 +7,7 @@ module Pushpop
       include HTTParty
 
       API_VERSION = 'v1'
-      base_uri 'https://api.producthunt.com/#{API_VERSION}'
+      base_uri 'https://api.producthunt.com'
 
       USER_SCOPABLE_ENDPOINTS = [
         'posts',
@@ -22,7 +23,29 @@ module Pushpop
       attr_accessor :_post
       
       def initialize(token)
+        @api_token = token
+      end
 
+      def get
+        url = construct_url
+
+        if url
+          self.class.headers({
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => "Bearer #{@api_token}"
+          })
+
+          response = self.class.get(construct_url)
+
+          if response.code == 200
+            JSON.parse(response.body)
+          else
+            raise "Something went wrong with the Product Hunt request, returned status code #{response.code}"
+          end
+        else
+          false
+        end
       end
 
       def reset
@@ -30,8 +53,21 @@ module Pushpop
         self._post = nil
       end
 
-      def construct_url(endpoint)
-        "#{API_VERSION}/#{endpoint}"    
+      def construct_url
+        return false unless @type
+
+        url = "/#{API_VERSION}/#{@type}"    
+
+        if @identifier
+          url = "#{url}/#{@identifier}"
+
+          if @subtype
+            url = "#{url}/#{@subtype}"
+          end 
+        end
+
+
+        url
       end
 
       def type(type)
