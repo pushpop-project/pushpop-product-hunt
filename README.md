@@ -7,6 +7,7 @@ Product Hunt plugin for [Pushpop](https://github.com/pushpop-project/pushpop).
   - [Post Functions](#[post]-functions)
   - [User Functions](#user-functions)
   - [Collection Functions](#collection-functions)
+  - [Pagination, Sorting, Ordering](#pagination-sorting-ordering)
 - [Todo](#todo)
 - [Contributing](#contributing)
 
@@ -154,11 +155,57 @@ product_hunt do
 end
 ```
 
-## TODO
+### Pagination, Sorting Ordering
 
-- Pagination
-- Sorting
-- Ordering
+Certain Product Hunt endpoints support pagination, sorting, and ordering. These functions allow you to customize your requests with those options.
+
+**per_page(count)**  
+*available on posts, users, and collections.*
+
+Sets the number of resources you should receive from any of the LIST functions
+
+``` ruby
+product_hunt do
+	posts
+	per_page 100
+end
+```
+
+**newer_than(id)**  
+*available on posts, users, and collections.*
+
+Filters your results to resources with an ID *higher* than the ID.
+
+``` ruby
+product_hunt do
+	posts
+	newer_than 1234
+end
+```
+
+**older_than(id)**  
+*available on posts, users, and collections.*
+
+Filters your results to resources with an ID *lower* than the ID.
+
+``` ruby
+product_hunt do
+	posts
+	older_than 4321
+end
+```
+
+**sort(field, [direction])**  
+*available on collections*
+
+Sorts your results by a certain field. By default, results will be sorted ascending. Pass `'desc'` as the second parameter to sort descending.
+
+``` ruby
+product_hunt do
+	collections
+	sort_by 'created_at', 'desc'
+end
+```
 
 ## Contributing
 
