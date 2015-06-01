@@ -49,11 +49,11 @@ module Pushpop
 
         if date.is_a? String
           # Parse the date, and then reoutput it to get a consistent format
-          client.option(day: Date.parse(date).to_s)
+          client.option('day', Date.parse(date).to_s)
         elsif date.is_a? Date
-          client.option(day: date.to_s)
+          client.option('day', date.to_s)
         elsif date.is_a? Numeric
-          client.option(days_ago: date)
+          client.option('days_ago', date)
         elsif !date.nil?
           raise 'Unknown date format'
         end
@@ -87,6 +87,25 @@ module Pushpop
       def featured_collections
         collections
         client.option('search[featured]' => true)
+      end
+
+      # Options Functions
+      
+      def per_page(count)
+        client.option('per_page', count)
+      end
+
+      def older_than(max)
+        client.option('older', max)
+      end
+      
+      def newer_than(min)
+        client.option('newer', min)
+      end
+
+      def sort(field, direction = 'asc')
+        client.option('sort_by', field)
+        client.option('order', direction) 
       end
     end
   end

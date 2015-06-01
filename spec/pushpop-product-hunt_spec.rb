@@ -1,13 +1,15 @@
 require 'spec_helper'
 require 'date'
 require 'webmock/rspec'
+require 'json'
 
 ENV['PRODUCT_HUNT_TOKEN'] = '12345'
 
 describe Pushpop::ProductHunt::Step do
 
   before(:each) do
-    stub_request(:get, /.*api\.producthunt\.com.*/)
+    stub_request(:get, /.*api\.producthunt\.com.*/).
+      to_return(:body => JSON.generate({:success => true}))
   end
 
   describe 'internal functions' do
@@ -44,7 +46,7 @@ describe Pushpop::ProductHunt::Step do
         day(3)
       end
 
-      expect(step.client).to receive(:option).with(days_ago: 3)
+      expect(step.client).to receive(:option).with('days_ago', 3)
 
       step.run
     end
@@ -54,7 +56,7 @@ describe Pushpop::ProductHunt::Step do
         day('15th May, 2015')
       end
 
-      expect(step.client).to receive(:option).with(day: '2015-05-15')
+      expect(step.client).to receive(:option).with('day', '2015-05-15')
 
       step.run
     end
@@ -64,7 +66,7 @@ describe Pushpop::ProductHunt::Step do
         day(Date.parse('2015-05-15'))
       end
 
-      expect(step.client).to receive(:option).with(day: '2015-05-15')
+      expect(step.client).to receive(:option).with('day', '2015-05-15')
 
       step.run
     end
@@ -206,6 +208,60 @@ describe Pushpop::ProductHunt::Step do
 
       expect(step.client).to receive(:type).with('collections')
       expect(step.client).to receive(:option).with('search[featured]' => true)
+
+      step.run
+    end
+  end
+
+  describe 'options functions' do
+    it 'sets the per page value' do
+      step = Pushpop::ProductHunt::Step.new do
+        per_page 100
+      end 
+
+      expect(step.client).to receive(:option).with('per_page', 100)
+
+      step.run
+    end
+
+    it 'sets the minimum id' do
+      step = Pushpop::ProductHunt::Step.new do
+        newer_than 54321
+      end
+
+      expect(step.client).to receive(:option).with('newer', 54321)
+
+      step.run
+    end
+
+    it 'sets the maximum id' do
+      step = Pushpop::ProductHunt::Step.new do
+        older_than 98765
+      end
+
+      expect(step.client).to receive(:option).with('older', 98765)
+
+      step.run
+    end
+
+    it 'sets the sort and defaults to asc' do
+      step = Pushpop::ProductHunt::Step.new do
+        sort 'created_at'
+      end
+
+      expect(step.client).to receive(:option).with('sort_by', 'created_at')
+      expect(step.client).to receive(:option).with('order', 'asc')
+
+      step.run
+    end
+
+    it 'can be overridden to order by desc' do
+      step = Pushpop::ProductHunt::Step.new do
+        sort 'created_at', 'desc'
+      end
+
+      expect(step.client).to receive(:option).with('sort_by', 'created_at')
+      expect(step.client).to receive(:option).with('order', 'desc')
 
       step.run
     end
