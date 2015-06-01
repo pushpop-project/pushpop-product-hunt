@@ -14,9 +14,9 @@ module Pushpop
         'collections'
       ]
       POST_SCOPABLE_ENDPOINTS = [
-        'users',
         'collections'
       ]
+
       PAGINATING_ENDPOINTS = [
         'posts',
         'users',
