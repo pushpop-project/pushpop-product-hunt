@@ -84,7 +84,7 @@ module Pushpop
         escaper = Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")
         self._options.each { |key, value|
           case key
-          when 'older', 'newer'
+          when 'older', 'newer', 'per_page'
             next unless PAGINATING_ENDPOINTS.include?(@subtype || @type)
           when 'sort_by'
             next unless SORTABLE_ENDPOINTS.include?(@subtype || @type)

@@ -212,4 +212,58 @@ describe Pushpop::ProductHunt::Step do
       step.run
     end
   end
+
+  describe 'options functions' do
+    it 'sets the per page value' do
+      step = Pushpop::ProductHunt::Step.new do
+        per_page 100
+      end 
+
+      expect(step.client).to receive(:option).with('per_page', 100)
+
+      step.run
+    end
+
+    it 'sets the minimum id' do
+      step = Pushpop::ProductHunt::Step.new do
+        newer_than 54321
+      end
+
+      expect(step.client).to receive(:option).with('newer', 54321)
+
+      step.run
+    end
+
+    it 'sets the maximum id' do
+      step = Pushpop::ProductHunt::Step.new do
+        older_than 98765
+      end
+
+      expect(step.client).to receive(:option).with('older', 98765)
+
+      step.run
+    end
+
+    it 'sets the sort and defaults to asc' do
+      step = Pushpop::ProductHunt::Step.new do
+        sort 'created_at'
+      end
+
+      expect(step.client).to receive(:option).with('sort_by', 'created_at')
+      expect(step.client).to receive(:option).with('order', 'asc')
+
+      step.run
+    end
+
+    it 'can be overridden to order by desc' do
+      step = Pushpop::ProductHunt::Step.new do
+        sort 'created_at', 'desc'
+      end
+
+      expect(step.client).to receive(:option).with('sort_by', 'created_at')
+      expect(step.client).to receive(:option).with('order', 'desc')
+
+      step.run
+    end
+  end
 end
