@@ -16,11 +16,13 @@ describe Pushpop::ProductHunt::Client do
     it 'resets state values' do
       client.user(123)
       client.post(321)
+      client.option('number', 456)
 
       client.reset
 
       expect(client._user).to be_nil
       expect(client._post).to be_nil  
+      expect(client._options).to eq({})
     end
 
     describe '#set_contextual_identifier' do
@@ -47,6 +49,47 @@ describe Pushpop::ProductHunt::Client do
         client.type('comments')
 
         expect(client.instance_variable_get('@type')).to eq('comments')
+      end
+    end
+
+    describe '#construct_url' do
+      before(:each) do
+        client.reset
+      end
+
+      it 'builds URLs with types' do
+        client.type 'post'
+
+        expect(client.construct_url).to include('/post')
+      end
+
+      it 'builds URLs with identifiers' do
+        client.type 'post'
+        client.identifier 10
+
+        expect(client.construct_url).to include('/post/10')
+      end
+
+      it 'builds URLs with subtypes' do
+        client.type 'user'
+        client.identifier 10
+        client.subtype 'posts'
+
+        expect(client.construct_url).to include('/user/10/posts')
+      end
+
+      it 'puts options in the URL' do
+        client.type 'post'
+        client.option 'some', 'thing'
+
+        expect(client.construct_url).to include('some=thing')
+      end
+
+      it 'doesnt add options that are blocked from an endpoint' do
+        client.type 'bad'
+        client.option 'order', 'asc'
+
+        expect(client.construct_url).not_to include('order=asc')
       end
     end
   end
@@ -114,6 +157,17 @@ describe Pushpop::ProductHunt::Client do
       it 'sets the resource identifier to the post id' do
         client.post(10)
         expect(client.instance_variable_get('@identifier')).to eq(10)
+      end
+    end
+
+    describe 'option' do
+      before(:each) do
+        client.reset
+      end
+
+      it 'sets keys and values' do
+        client.option('test', 'tester')
+        expect(client._options['test']).to eq('tester')
       end
     end
   end

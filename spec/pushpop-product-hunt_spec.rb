@@ -1,13 +1,15 @@
 require 'spec_helper'
 require 'date'
 require 'webmock/rspec'
+require 'json'
 
 ENV['PRODUCT_HUNT_TOKEN'] = '12345'
 
 describe Pushpop::ProductHunt::Step do
 
   before(:each) do
-    stub_request(:get, /.*api\.producthunt\.com.*/)
+    stub_request(:get, /.*api\.producthunt\.com.*/).
+      to_return(:body => JSON.generate({:success => true}))
   end
 
   describe 'internal functions' do
@@ -44,7 +46,7 @@ describe Pushpop::ProductHunt::Step do
         day(3)
       end
 
-      expect(step.client).to receive(:option).with(days_ago: 3)
+      expect(step.client).to receive(:option).with('days_ago', 3)
 
       step.run
     end
@@ -54,7 +56,7 @@ describe Pushpop::ProductHunt::Step do
         day('15th May, 2015')
       end
 
-      expect(step.client).to receive(:option).with(day: '2015-05-15')
+      expect(step.client).to receive(:option).with('day', '2015-05-15')
 
       step.run
     end
@@ -64,7 +66,7 @@ describe Pushpop::ProductHunt::Step do
         day(Date.parse('2015-05-15'))
       end
 
-      expect(step.client).to receive(:option).with(day: '2015-05-15')
+      expect(step.client).to receive(:option).with('day', '2015-05-15')
 
       step.run
     end
