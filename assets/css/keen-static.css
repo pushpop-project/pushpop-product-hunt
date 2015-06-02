@@ -68,7 +68,7 @@ h3 {
 }
 .navbar-nav > li > a.navbar-btn:focus,
 .navbar-nav > li > a.navbar-btn:hover {
-  background-color: rgba(255,255,255,.35);
+  background-color: rgba(84,106,126,1);
 }
 .navbar-collapse {
   box-shadow: none;
@@ -177,6 +177,11 @@ pre code {
           transform: translateY(-50%);
 }
 
+.example-message h2 {
+  font-weight: 800;
+  text-align: center;
+}
+
 .example-message .glyphicon {
   display: block;
   color: #da552f;
@@ -234,8 +239,7 @@ pre code {
   font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 18px;
   font-weight: 700;
-  padding: 21px 0;
-  width: 380px;
+  padding: 21px;
 }
 
 .cta-secondary-btn {
