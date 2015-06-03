@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Joe Wegner"]
   s.email       = "joe@keen.io"
   s.homepage    = "https://github.com/pushpop-project/pushpop-product-hunt"
-  s.summary     = "A template for creating Pushpop plugins"
+  s.summary     = "A Pushpop Plugin for triggering based on Product Hunt data"
 
   s.add_dependency "pushpop"
   s.add_dependency "hunting_season"
