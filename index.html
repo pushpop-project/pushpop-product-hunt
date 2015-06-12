@@ -126,11 +126,14 @@ job do
   <script type="text/javascript" src="assets/js/common-web.min.js"></script>
   <script type='text/javascript'>
     CommonWeb.Keen.Client = new Keen({
-      projectId: '5570633659949a0cf4ccea22',
-      writeKey: 'c1d7962ec3e2156f3a387687da654839a1f7c7448df95a7a02b8a5a946e14143323c4ff606b03016726ed3a821aaf8dd25618e1178c0e8778dcad105493a7a002c3676ba2af4f39ab9ebe7c85863fb10ace53f942c659e20891418fa847e292f435403eed3e1c06460e626b13ce73885'
+      projectId: '557a0832c2266c48aa9977fd',
+      writeKey: '16e4effde55c09ce3541a5b323e4e5e032b5bd278f43f57d57be720c6c500afb7a81fa7c99d1f9886ad9da08da7956d1e25853305e8dd79da3e0ecb0a8160ca9904c25b892b92b53b999b7ea35f531ea04fee5634a43e2b673711814cded8691135824d11f7ff80be4d8cd0eb421c7cb'
     });
 
     CommonWeb.addGlobalProperties(CommonWeb.Keen.globalProperties);
+    CommonWeb.addGlobalProperties({
+      project_name: "Pushpop Product Hunt gh-page"
+    });
     CommonWeb.Callback = CommonWeb.Keen.Callback;
 
     CommonWeb.trackSession();
